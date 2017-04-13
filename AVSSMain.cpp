@@ -10,6 +10,7 @@
 #include "UtilsFileIni.h"
 #include "UtilsStr.h"
 #include "UtilsMisc.h"
+#include "UtilsBase64.h"
 
 // ---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -68,8 +69,9 @@ void __fastcall TMain::FormCreate(TObject *Sender) {
 		cboxPassSave->Checked = FileIni->ReadBool("Connection",
 			"PassSave", false);
 
-		ePass->Text = EncryptDecrypt(FileIni->ReadString("Connection",
-			"Pass", ""));
+		ePass->Text =
+			EncryptDecrypt(FromBase64(FileIni->ReadString("Connection",
+			"Pass", "")));
 
 		FileIni->ReadSectionValues("ScaleNames", ScaleNamesList);
 
@@ -127,7 +129,7 @@ void __fastcall TMain::FormDestroy(TObject *Sender) {
 		FileIni->WriteBool("Connection", "PassSave", cboxPassSave->Checked);
 		if (cboxPassSave->Checked) {
 			FileIni->WriteString("Connection", "Pass",
-				EncryptDecrypt(ePass->Text));
+				ToBase64(EncryptDecrypt(ePass->Text)));
 		}
 		else {
 			FileIni->WriteString("Connection", "Pass", "");

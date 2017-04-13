@@ -172,3 +172,25 @@ void __fastcall TfrmUnixTime::eDateTimeWinChange(TObject *Sender) {
 	}
 }
 // ---------------------------------------------------------------------------
+
+void __fastcall TfrmUnixTime::eDateTimeWinSubLabelMouseDown(TObject *Sender,
+	TMouseButton Button, TShiftState Shift, int X, int Y) {
+
+	TComponent *AComponent = dynamic_cast<TComponent*>(Sender);
+
+	switch (AComponent->Owner->Tag) {
+	case etWin:
+		eDateTimeWin->SetFocus();
+		eDateTimeWin->SelectAll();
+		break;
+	case etSQL:
+		eDateTimeSQL->SetFocus();
+		eDateTimeSQL->SelectAll();
+		break;
+	case etUnix:
+		eUnixTime->SetFocus();
+		eUnixTime->SelectAll();
+		break;
+	}
+}
+// ---------------------------------------------------------------------------

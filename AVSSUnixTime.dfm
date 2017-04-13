@@ -27,6 +27,7 @@ object frmUnixTime: TfrmUnixTime
     EditLabel.Width = 158
     EditLabel.Height = 17
     EditLabel.Caption = #1058#1077#1082#1091#1097#1080#1081' '#1092#1086#1088#1084#1072#1090' Windows'
+    EditLabel.OnMouseDown = eDateTimeWinSubLabelMouseDown
     TabOrder = 0
     OnChange = eDateTimeWinChange
   end
@@ -38,6 +39,7 @@ object frmUnixTime: TfrmUnixTime
     EditLabel.Width = 73
     EditLabel.Height = 17
     EditLabel.Caption = #1060#1086#1088#1084#1072#1090' SQL'
+    EditLabel.OnMouseDown = eDateTimeWinSubLabelMouseDown
     TabOrder = 1
     OnChange = eDateTimeWinChange
   end
@@ -49,6 +51,7 @@ object frmUnixTime: TfrmUnixTime
     EditLabel.Width = 75
     EditLabel.Height = 17
     EditLabel.Caption = #1060#1086#1088#1084#1072#1090' Unix'
+    EditLabel.OnMouseDown = eDateTimeWinSubLabelMouseDown
     TabOrder = 2
     OnChange = eDateTimeWinChange
   end
