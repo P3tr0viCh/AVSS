@@ -2,7 +2,7 @@ object Main: TMain
   Left = 0
   Top = 0
   Caption = #1056#1072#1073#1086#1090#1072' '#1089' '#1080#1085#1090#1077#1075#1088#1072#1094#1080#1086#1085#1085#1099#1084' '#1089#1077#1088#1074#1077#1088#1086#1084' '#1074#1077#1089#1086#1074#1099#1093' '#1089#1080#1089#1090#1077#1084
-  ClientHeight = 450
+  ClientHeight = 490
   ClientWidth = 750
   Color = clBtnFace
   Constraints.MinHeight = 450
@@ -22,9 +22,9 @@ object Main: TMain
   TextHeight = 17
   object DBGrid: TDBGrid
     Left = 0
-    Top = 233
+    Top = 268
     Width = 750
-    Height = 103
+    Height = 108
     Align = alClient
     DataSource = DataSource
     Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
@@ -39,13 +39,13 @@ object Main: TMain
     Left = 0
     Top = 0
     Width = 750
-    Height = 233
+    Height = 268
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
     DesignSize = (
       750
-      233)
+      268)
     object lblScales: TLabel
       Left = 70
       Top = 142
@@ -55,10 +55,11 @@ object Main: TMain
     end
     object lblFrom: TLabel
       Left = 18
-      Top = 82
+      Top = 81
       Width = 36
       Height = 17
       Caption = 'FROM'
+      FocusControl = cboxTable
     end
     object lblDate: TLabel
       Left = 70
@@ -76,17 +77,35 @@ object Main: TMain
     end
     object lblSelect: TLabel
       Left = 18
-      Top = 52
+      Top = 51
       Width = 42
       Height = 17
       Caption = 'SELECT'
+      FocusControl = cboxFields
     end
     object lblWhere: TLabel
-      Left = 20
-      Top = 112
+      Left = 17
+      Top = 111
       Width = 43
       Height = 17
       Caption = 'WHERE'
+      FocusControl = eWhere
+    end
+    object lblOrder: TLabel
+      Left = 18
+      Top = 231
+      Width = 42
+      Height = 17
+      Caption = 'ORDER'
+      FocusControl = eOrder
+    end
+    object lblWhereAdd: TLabel
+      Left = 70
+      Top = 201
+      Width = 22
+      Height = 17
+      Caption = 'and'
+      FocusControl = eWhereAdd
     end
     object btnPerform: TButton
       Left = 632
@@ -96,7 +115,7 @@ object Main: TMain
       Anchors = [akTop, akRight]
       Caption = #1042#1099#1087#1086#1083#1085#1080#1090#1100
       Default = True
-      TabOrder = 9
+      TabOrder = 10
       OnClick = btnPerformClick
     end
     object eFull: TEdit
@@ -108,17 +127,13 @@ object Main: TMain
       AutoSelect = False
       TabOrder = 0
     end
-    object eOrder: TLabeledEdit
-      Left = 72
-      Top = 198
+    object eOrder: TEdit
+      Left = 74
+      Top = 228
       Width = 542
       Height = 25
       Anchors = [akLeft, akTop, akRight]
-      EditLabel.Width = 42
-      EditLabel.Height = 17
-      EditLabel.Caption = 'ORDER'
-      LabelPosition = lpLeft
-      TabOrder = 8
+      TabOrder = 9
       OnChange = cboxFieldsChange
     end
     object cboxScales: TComboBox
@@ -198,22 +213,22 @@ object Main: TMain
     end
     object btnClose: TButton
       Left = 632
-      Top = 193
+      Top = 224
       Width = 100
       Height = 30
       Anchors = [akTop, akRight]
       Caption = #1047#1072#1082#1088#1099#1090#1100
-      TabOrder = 12
+      TabOrder = 13
       OnClick = btnCloseClick
     end
     object btnAbout: TButton
       Left = 632
-      Top = 144
+      Top = 176
       Width = 100
       Height = 30
       Anchors = [akTop, akRight]
       Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
-      TabOrder = 11
+      TabOrder = 12
       OnClick = btnAboutClick
     end
     object btnUnixTime: TButton
@@ -223,38 +238,59 @@ object Main: TMain
       Height = 30
       Anchors = [akTop, akRight]
       Caption = #1070#1085#1080#1082#1089'-'#1074#1088#1077#1084#1103
-      TabOrder = 10
+      TabOrder = 11
       OnClick = btnUnixTimeClick
+    end
+    object eWhereAdd: TEdit
+      Left = 98
+      Top = 198
+      Width = 518
+      Height = 25
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 8
+      OnChange = cboxScalesChange
     end
   end
   object StatusBar: TStatusBar
     Left = 0
-    Top = 431
+    Top = 471
     Width = 750
     Height = 19
     Panels = <
       item
         Text = #169' '#1055'3'#1090#1088'0'#1074#1080#1063#1098
+        Width = 150
+      end
+      item
+        Text = #1050#1086#1083#1080#1095#1077#1089#1090#1074#1086' '#1079#1072#1087#1080#1089#1077#1081': %d'
+        Width = 200
+      end
+      item
+        Text = #1053#1086#1084#1077#1088' '#1079#1072#1087#1080#1089#1080': %d'
         Width = 50
       end>
+    ExplicitTop = 601
   end
   object DBNavigator: TDBNavigator
     Left = 0
-    Top = 336
+    Top = 376
     Width = 750
     Height = 25
     DataSource = DataSource
+    VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbPost, nbCancel]
     Align = alBottom
     TabOrder = 3
+    ExplicitTop = 506
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 361
+    Top = 401
     Width = 750
     Height = 70
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 4
+    ExplicitTop = 531
     object eServerIP: TLabeledEdit
       Left = 18
       Top = 30
@@ -322,11 +358,13 @@ object Main: TMain
   end
   object DataSource: TDataSource
     DataSet = ADODataSet
+    OnDataChange = DataSourceDataChange
     Left = 136
     Top = 280
   end
   object ADODataSet: TADODataSet
     Connection = ADOConnection
+    AfterScroll = ADODataSetAfterScroll
     Parameters = <>
     Left = 208
     Top = 280

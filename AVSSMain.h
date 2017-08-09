@@ -29,7 +29,7 @@ __published: // IDE-managed Components
 	TLabel *lblWhere;
 	TButton *btnPerform;
 	TEdit *eFull;
-	TLabeledEdit *eOrder;
+	TEdit *eOrder;
 	TComboBox *cboxScales;
 	TComboBox *cboxTable;
 	TDateTimePicker *dtpDateFrom;
@@ -52,6 +52,9 @@ __published: // IDE-managed Components
 	TDataSource *DataSource;
 	TADODataSet *ADODataSet;
 	TButton *btnUnixTime;
+	TLabel *lblOrder;
+	TEdit *eWhereAdd;
+	TLabel *lblWhereAdd;
 
 	void __fastcall btnCloseClick(TObject *Sender);
 	void __fastcall btnAboutClick(TObject *Sender);
@@ -65,6 +68,8 @@ __published: // IDE-managed Components
 	void __fastcall cboxTableChange(TObject *Sender);
 	void __fastcall btnUnixTimeClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
+	void __fastcall DataSourceDataChange(TObject *Sender, TField *Field);
+	void __fastcall ADODataSetAfterScroll(TDataSet *DataSet);
 
 private: // User declarations
 
@@ -72,6 +77,11 @@ private: // User declarations
 	TStringList * ScaleTablesList;
 	TStringList * TablesList;
 	TStringList * FieldsList;
+
+	bool DisableUpdateWhere;
+
+	void UpdateRecordCount(int RecordCount);
+	void UpdateRecordNo(int RecordNo);
 
 public: // User declarations
 

@@ -3,6 +3,7 @@ __history
 *.local
 *.stat
 *.dsk
+*.vlb
 
 # Compiled Object files
 *.slo

@@ -19,6 +19,8 @@ TMain *Main;
 
 // ---------------------------------------------------------------------------
 __fastcall TMain::TMain(TComponent* Owner) : TForm(Owner) {
+	UpdateRecordCount(-1);
+	UpdateRecordNo(-1);
 }
 
 // ---------------------------------------------------------------------------
@@ -44,6 +46,28 @@ String EncryptDecrypt(String S) {
 }
 
 // ---------------------------------------------------------------------------
+void TMain::UpdateRecordCount(int RecordCount) {
+	if (RecordCount > -1) {
+		StatusBar->Panels->Items[1]->Text =
+			Format("Количество записей: %d", ARRAYOFCONST((RecordCount)));
+	}
+	else {
+		StatusBar->Panels->Items[1]->Text = "";
+	}
+}
+
+// ---------------------------------------------------------------------------
+void TMain::UpdateRecordNo(int RecordNo) {
+	if (RecordNo > 0) {
+		StatusBar->Panels->Items[2]->Text =
+			Format("Номер записи: %d", ARRAYOFCONST((RecordNo)));
+	}
+	else {
+		StatusBar->Panels->Items[2]->Text = "";
+	}
+}
+
+// ---------------------------------------------------------------------------
 void __fastcall TMain::FormCreate(TObject *Sender) {
 	ScaleNamesList = new TStringList;
 	ScaleTablesList = new TStringList;
@@ -59,6 +83,11 @@ void __fastcall TMain::FormCreate(TObject *Sender) {
 		FileIni->ReadFormBounds(this);
 
 		eWhere->Text = FileIni->ReadString("Query", "Where", "");
+
+		DisableUpdateWhere = true;
+		eWhereAdd->Text = FileIni->ReadString("Query", "WhereAdd", "");
+		DisableUpdateWhere = false;
+
 		eOrder->Text = FileIni->ReadString("Query", "Order", "");
 
 		eServerIP->Text = FileIni->ReadString("Connection", "IP", "");
@@ -119,6 +148,7 @@ void __fastcall TMain::FormDestroy(TObject *Sender) {
 		FileIni->WriteString("Query", "Fields", cboxFields->Text);
 		FileIni->WriteString("Query", "Table", cboxTable->Text);
 		FileIni->WriteString("Query", "Where", eWhere->Text);
+		FileIni->WriteString("Query", "WhereAdd", eWhereAdd->Text);
 		FileIni->WriteString("Query", "Order", eOrder->Text);
 
 		FileIni->WriteString("Connection", "IP", eServerIP->Text);
@@ -198,6 +228,10 @@ void __fastcall TMain::cboxDateDayClick(TObject *Sender) {
 
 // ---------------------------------------------------------------------------
 void __fastcall TMain::cboxScalesChange(TObject *Sender) {
+	if (DisableUpdateWhere) {
+		return;
+	}
+
 	if (cboxScales->ItemIndex > -1) {
 		String ScaleNum = ScaleNamesList->Names[cboxScales->ItemIndex];
 		String TableName =
@@ -219,7 +253,9 @@ void __fastcall TMain::cboxScalesChange(TObject *Sender) {
 		S = "";
 	}
 	else {
-		S = "scales=" + ScaleNamesList->Names[cboxScales->ItemIndex];
+		if (ScaleNamesList->Count > 0) {
+			S = "scales=" + ScaleNamesList->Names[cboxScales->ItemIndex];
+		}
 	}
 
 	if (cboxDateDay->Checked) {
@@ -230,6 +266,8 @@ void __fastcall TMain::cboxScalesChange(TObject *Sender) {
 	DateTimeToString(D2, "yyyyMMdd000000", dtpDateTo->Date);
 
 	S = ConcatStrings(S, "bdatetime>=" + D1 + " and bdatetime<" + D2, " and ");
+
+	S = ConcatStrings(S, eWhereAdd->Text, " and ");
 
 	eWhere->Text = S;
 }
@@ -245,6 +283,9 @@ void __fastcall TMain::FormKeyUp(TObject *Sender, WORD &Key, TShiftState Shift)
 // ---------------------------------------------------------------------------
 void __fastcall TMain::btnPerformClick(TObject *Sender) {
 	ShowWaitCursor();
+
+	UpdateRecordCount(-1);
+	UpdateRecordNo(-1);
 
 	try {
 		ADOConnection->Close();
@@ -273,5 +314,16 @@ void __fastcall TMain::btnUnixTimeClick(TObject *Sender) {
 // ---------------------------------------------------------------------------
 void __fastcall TMain::FormShow(TObject *Sender) {
 	// frmUnixTime->Show();
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMain::DataSourceDataChange(TObject *Sender, TField *Field) {
+	UpdateRecordCount(ADODataSet->RecordCount);
+	UpdateRecordNo(-1);
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMain::ADODataSetAfterScroll(TDataSet *DataSet) {
+	UpdateRecordNo(ADODataSet->RecNo);
 }
 // ---------------------------------------------------------------------------
