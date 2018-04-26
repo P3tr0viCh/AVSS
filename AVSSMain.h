@@ -17,8 +17,7 @@
 
 // ---------------------------------------------------------------------------
 class TMain : public TForm {
-__published: // IDE-managed Components
-
+__published:
 	TDBGrid *DBGrid;
 	TPanel *pnlTop;
 	TLabel *lblScales;
@@ -55,6 +54,8 @@ __published: // IDE-managed Components
 	TLabel *lblOrder;
 	TEdit *eWhereAdd;
 	TLabel *lblWhereAdd;
+	TDateTimePicker *dtpTimeTo;
+	TDateTimePicker *dtpTimeFrom;
 
 	void __fastcall btnCloseClick(TObject *Sender);
 	void __fastcall btnAboutClick(TObject *Sender);
@@ -70,21 +71,26 @@ __published: // IDE-managed Components
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall DataSourceDataChange(TObject *Sender, TField *Field);
 	void __fastcall ADODataSetAfterScroll(TDataSet *DataSet);
+	void __fastcall eOrderChange(TObject *Sender);
+	void __fastcall dtpDateFromChange(TObject *Sender);
 
-private: // User declarations
-
+private:
 	TStringList * ScaleNamesList;
 	TStringList * ScaleTablesList;
 	TStringList * TablesList;
 	TStringList * FieldsList;
+	TStringList * OrderByList;
+	TStringList * DateTimeFieldList;
 
-	bool DisableUpdateWhere;
+	bool MakeInProcess;
 
 	void UpdateRecordCount(int RecordCount);
 	void UpdateRecordNo(int RecordNo);
 
-public: // User declarations
+	void UpdateQuery();
+	void UpdateWhere();
 
+public:
 	__fastcall TMain(TComponent* Owner);
 };
 

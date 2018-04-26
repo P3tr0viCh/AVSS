@@ -1,0 +1,20 @@
+#include "AVSSStrings.h"
+
+STRINGTABLE
+BEGIN
+IDS_COPYRIGHT,
+        "© Константин Дураев (Уральская Сталь, ЦВТС)|@P3tr0viCh@mail.ru"
+IDS_COPYRIGHT_STATUS,
+        "© Константин Дураев"
+IDS_MAIN_CAPTION,
+        "%s вер. %s"
+
+IDS_TEXT_RECORD_COUNT,
+        "Количество записей: %d"
+IDS_TEXT_RECORD_NUM,
+        "Номер записи: %d"
+
+IDS_MYSQL_CONNECTION,
+        "DRIVER={MySQL ODBC 3.51 Driver}; SERVER=%s; PORT=%s; DATABASE=%s; USER=%s; PASSWORD=%s; OPTION=3;"
+
+END

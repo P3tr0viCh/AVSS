@@ -21,7 +21,7 @@ __fastcall TfrmUnixTime::TfrmUnixTime(TComponent* Owner) : TForm(Owner) {
 
 // ---------------------------------------------------------------------------
 void __fastcall TfrmUnixTime::FormCreate(TObject *Sender) {
-	TFileIni* FileIni = TFileIni::GetNewInstance();
+	TFileIni * FileIni = TFileIni::GetNewInstance();
 
 	try {
 		FileIni->ReadFormPosition(this);
@@ -41,7 +41,7 @@ void __fastcall TfrmUnixTime::FormCreate(TObject *Sender) {
 
 // ---------------------------------------------------------------------------
 void __fastcall TfrmUnixTime::FormDestroy(TObject *Sender) {
-	TFileIni* FileIni = TFileIni::GetNewInstance();
+	TFileIni * FileIni = TFileIni::GetNewInstance();
 
 	try {
 		FileIni->WriteFormPosition(this);
@@ -53,9 +53,7 @@ void __fastcall TfrmUnixTime::FormDestroy(TObject *Sender) {
 
 // ---------------------------------------------------------------------------
 void __fastcall TfrmUnixTime::FormKeyPress(TObject *Sender,
-	System::WideChar &Key)
-
-{
+	System::WideChar &Key) {
 	if (Key == 27) {
 		Key = 0;
 		Close();
@@ -131,7 +129,7 @@ void __fastcall TfrmUnixTime::eDateTimeWinChange(TObject *Sender) {
 
 	SelfChange = true;
 	try {
-		TLabeledEdit *AEdit = dynamic_cast<TLabeledEdit*>(Sender);
+		TLabeledEdit * AEdit = dynamic_cast<TLabeledEdit*>(Sender);
 
 		LabeledEditSetError(eDateTimeWin, false);
 		LabeledEditSetError(eDateTimeSQL, false);
@@ -175,8 +173,7 @@ void __fastcall TfrmUnixTime::eDateTimeWinChange(TObject *Sender) {
 
 void __fastcall TfrmUnixTime::eDateTimeWinSubLabelMouseDown(TObject *Sender,
 	TMouseButton Button, TShiftState Shift, int X, int Y) {
-
-	TComponent *AComponent = dynamic_cast<TComponent*>(Sender);
+	TComponent * AComponent = dynamic_cast<TComponent*>(Sender);
 
 	switch (AComponent->Owner->Tag) {
 	case etWin:

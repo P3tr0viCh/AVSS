@@ -6,7 +6,10 @@
 #include "AVSSMain.h"
 #include "AVSSUnixTime.h"
 
+#include "AVSSStrings.h"
+
 #include "AboutFrm.h"
+
 #include "UtilsFileIni.h"
 #include "UtilsStr.h"
 #include "UtilsMisc.h"
@@ -15,6 +18,7 @@
 // ---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
+
 TMain *Main;
 
 // ---------------------------------------------------------------------------
@@ -30,7 +34,8 @@ void __fastcall TMain::btnCloseClick(TObject *Sender) {
 
 // ---------------------------------------------------------------------------
 void __fastcall TMain::btnAboutClick(TObject *Sender) {
-	ShowAbout(18);
+	ShowAbout(18, MAXBYTE, MAXBYTE, MAXBYTE, NULL, NULL, NULL, NULL, NULL,
+		LoadStr(IDS_COPYRIGHT));
 }
 
 // ---------------------------------------------------------------------------
@@ -49,7 +54,7 @@ String EncryptDecrypt(String S) {
 void TMain::UpdateRecordCount(int RecordCount) {
 	if (RecordCount > -1) {
 		StatusBar->Panels->Items[1]->Text =
-			Format("Количество записей: %d", ARRAYOFCONST((RecordCount)));
+			Format(IDS_TEXT_RECORD_COUNT, RecordCount);
 	}
 	else {
 		StatusBar->Panels->Items[1]->Text = "";
@@ -60,7 +65,7 @@ void TMain::UpdateRecordCount(int RecordCount) {
 void TMain::UpdateRecordNo(int RecordNo) {
 	if (RecordNo > 0) {
 		StatusBar->Panels->Items[2]->Text =
-			Format("Номер записи: %d", ARRAYOFCONST((RecordNo)));
+			Format(IDS_TEXT_RECORD_NUM, RecordNo);
 	}
 	else {
 		StatusBar->Panels->Items[2]->Text = "";
@@ -73,20 +78,26 @@ void __fastcall TMain::FormCreate(TObject *Sender) {
 	ScaleTablesList = new TStringList;
 	TablesList = new TStringList;
 	FieldsList = new TStringList;
+	OrderByList = new TStringList;
+	DateTimeFieldList = new TStringList;
 
-	dtpDateFrom->DateTime = Now();
-	dtpDateTo->DateTime = dtpDateFrom->DateTime + 1;
+	Caption = Format(IDS_MAIN_CAPTION,
+		ARRAYOFCONST((Application->Title, GetFileVer(Application->ExeName))));
+	StatusBar->Panels->Items[0]->Text = LoadStr(IDS_COPYRIGHT_STATUS);
 
-	TFileIni* FileIni = TFileIni::GetNewInstance();
+	MakeInProcess = true;
+
+	dtpDateFrom->Date = Now();
+	dtpDateTo->Date = dtpDateFrom->Date;
+
+	TFileIni * FileIni = TFileIni::GetNewInstance();
 
 	try {
 		FileIni->ReadFormBounds(this);
 
 		eWhere->Text = FileIni->ReadString("Query", "Where", "");
 
-		DisableUpdateWhere = true;
 		eWhereAdd->Text = FileIni->ReadString("Query", "WhereAdd", "");
-		DisableUpdateWhere = false;
 
 		eOrder->Text = FileIni->ReadString("Query", "Order", "");
 
@@ -126,21 +137,30 @@ void __fastcall TMain::FormCreate(TObject *Sender) {
 
 		cboxFields->Items->Add("*");
 		for (int i = 0; i < FieldsList->Count; i++) {
-			cboxFields->Items->Add(FieldsList->ValueFromIndex[i]);
+			String Fields = FieldsList->ValueFromIndex[i];
+
+			if (cboxFields->Items->IndexOf(Fields) < 0) {
+				cboxFields->Items->Add(Fields);
+			}
 		}
 
 		cboxFields->Text = FileIni->ReadString("Query", "Fields", "");
+
+		FileIni->ReadSectionValues("OrderBy", OrderByList);
+		FileIni->ReadSectionValues("DateTimeField", DateTimeFieldList);
 	}
 	__finally {
 		delete FileIni;
 	}
 
-	cboxFieldsChange(this);
+	MakeInProcess = false;
+
+	UpdateQuery();
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMain::FormDestroy(TObject *Sender) {
-	TFileIni* FileIni = TFileIni::GetNewInstance();
+void __fastcall TMain::FormDestroy(TObject * Sender) {
+	TFileIni * FileIni = TFileIni::GetNewInstance();
 
 	try {
 		FileIni->WriteFormBounds(this);
@@ -169,68 +189,174 @@ void __fastcall TMain::FormDestroy(TObject *Sender) {
 		delete FileIni;
 	}
 
-	delete FieldsList;
-	delete TablesList;
-	delete ScaleTablesList;
-	delete ScaleNamesList;
+	DateTimeFieldList->Free();
+	OrderByList->Free();
+	FieldsList->Free();
+	TablesList->Free();
+	ScaleTablesList->Free();
+	ScaleNamesList->Free();
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMain::cboxFieldsChange(TObject *Sender) {
-	String ASelect, AFrom, AWhere, AOrder;
+void TMain::UpdateQuery() {
+	if (MakeInProcess) {
+		return;
+	}
 
-	if (cboxFields->Text != "") {
-		ASelect = cboxFields->Text;
+	String Select, From, Where, Order;
+
+	if (!IsEmpty(cboxFields->Text)) {
+		Select = cboxFields->Text;
 	}
 	else {
-		ASelect = "*";
+		Select = "*";
 	}
 
-	ASelect = ConcatStrings("SELECT", ASelect, SPACE);
+	Select = ConcatStrings("SELECT", Select, SPACE);
 
-	if (cboxTable->Text != "") {
-		AFrom = ConcatStrings("FROM", cboxTable->Text, SPACE);
+	if (!IsEmpty(cboxTable->Text)) {
+		From = ConcatStrings("FROM", cboxTable->Text, SPACE);
 	}
-	if (eWhere->Text != "") {
-		AWhere = ConcatStrings("WHERE", eWhere->Text, SPACE);
+	if (!IsEmpty(eWhere->Text)) {
+		Where = ConcatStrings("WHERE", eWhere->Text, SPACE);
 	}
-	if (eOrder->Text != "") {
-		AOrder = ConcatStrings("ORDER BY", eOrder->Text, SPACE);
+	if (!IsEmpty(eOrder->Text)) {
+		Order = ConcatStrings("ORDER BY", eOrder->Text, SPACE);
 	}
 
-	eFull->Text = ConcatStrings(ConcatStrings(ConcatStrings(ASelect, AFrom,
-		SPACE), AWhere, SPACE), AOrder, SPACE);
+	eFull->Text = ConcatStrings(ConcatStrings(ConcatStrings(Select, From,
+		SPACE), Where, SPACE), Order, SPACE);
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMain::cboxTableChange(TObject *Sender) {
-	if (cboxTable->ItemIndex > -1) {
-		String FieldsName = TablesList->ValueFromIndex[cboxTable->ItemIndex];
+void TMain::UpdateWhere() {
+	MakeInProcess = true;
 
-		if (!FieldsName.IsEmpty()) {
-			String Fields =
-				FieldsList->ValueFromIndex[FieldsList->IndexOfName(FieldsName)];
+	String Where;
 
-			if (!Fields.IsEmpty()) {
-				cboxFields->Text = Fields;
-			}
+	if (cboxScales->ItemIndex == 0) {
+		Where = "";
+	}
+	else {
+		if (ScaleNamesList->Count > 0) {
+			Where = "scales=" + ScaleNamesList->Names[cboxScales->ItemIndex];
 		}
 	}
 
-	cboxFieldsChange(this);
+	String DateTimeField =
+		DateTimeFieldList->ValueFromIndex[DateTimeFieldList->IndexOfName
+		("default")];
+
+	if (cboxTable->ItemIndex > -1) {
+		int DateTimeFieldIndex =
+			DateTimeFieldList->IndexOfName
+			(cboxTable->Items->Strings[cboxTable->ItemIndex]);
+
+		if (DateTimeFieldIndex > -1) {
+			DateTimeField =
+				DateTimeFieldList->ValueFromIndex[DateTimeFieldIndex];
+		}
+	}
+
+	if (!IsEmpty(DateTimeField)) {
+		if (cboxDateDay->Checked) {
+			dtpDateTo->Date = dtpDateFrom->Date;
+			dtpTimeTo->Time = StrToTime("23:59:59");
+		}
+
+		dtpDateFrom->Time = dtpTimeFrom->Time;
+		dtpDateTo->Time = dtpTimeTo->Time;
+
+		String D1, D2;
+
+		DateTimeToString(D1, "yyyy-MM-dd HH:mm:ss", dtpDateFrom->DateTime);
+		DateTimeToString(D2, "yyyy-MM-dd HH:mm:ss", dtpDateTo->DateTime);
+
+		D1 = "\"" + D1 + "\"";
+		D2 = "\"" + D2 + "\"";
+
+		Where = ConcatStrings(Where, DateTimeField + ">=" + D1 + " and " +
+			DateTimeField + "<=" + D2, " and ");
+	}
+
+	Where = ConcatStrings(Where, eWhereAdd->Text, " and ");
+
+	eWhere->Text = Where;
+
+	MakeInProcess = false;
+
+	UpdateQuery();
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMain::cboxDateDayClick(TObject *Sender) {
-	dtpDateTo->Enabled = !cboxDateDay->Checked;
-	cboxScalesChange(this);
-}
-
-// ---------------------------------------------------------------------------
-void __fastcall TMain::cboxScalesChange(TObject *Sender) {
-	if (DisableUpdateWhere) {
+void __fastcall TMain::cboxFieldsChange(TObject * Sender) {
+	if (MakeInProcess) {
 		return;
 	}
+
+	UpdateQuery();
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMain::cboxTableChange(TObject * Sender) {
+	if (MakeInProcess) {
+		return;
+	}
+
+	MakeInProcess = true;
+
+	if (cboxTable->ItemIndex > -1) {
+		String TableName = TablesList->Names[cboxTable->ItemIndex];
+
+		String FieldsName = TablesList->ValueFromIndex[cboxTable->ItemIndex];
+
+		if (!IsEmpty(FieldsName)) {
+			String Fields =
+				FieldsList->ValueFromIndex[FieldsList->IndexOfName(FieldsName)];
+
+			if (!IsEmpty(Fields)) {
+				cboxFields->Text = Fields;
+			}
+		}
+
+		String OrderBy =
+			OrderByList->ValueFromIndex[OrderByList->IndexOfName("default")];
+
+		int OrderByNameIndex = OrderByList->IndexOfName(TableName);
+		if (OrderByNameIndex > -1) {
+			OrderBy = OrderByList->ValueFromIndex[OrderByNameIndex];
+
+		}
+
+		eOrder->Text = OrderBy;
+	}
+
+	MakeInProcess = false;
+
+	UpdateWhere();
+
+	UpdateQuery();
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMain::cboxDateDayClick(TObject * Sender) {
+	if (MakeInProcess) {
+		return;
+	}
+
+	dtpDateTo->Enabled = !cboxDateDay->Checked;
+	dtpTimeTo->Enabled = dtpDateTo->Enabled;
+
+	cboxScalesChange(Sender);
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMain::cboxScalesChange(TObject * Sender) {
+	if (MakeInProcess) {
+		return;
+	}
+
+	MakeInProcess = true;
 
 	if (cboxScales->ItemIndex > -1) {
 		String ScaleNum = ScaleNamesList->Names[cboxScales->ItemIndex];
@@ -238,8 +364,9 @@ void __fastcall TMain::cboxScalesChange(TObject *Sender) {
 			ScaleTablesList->ValueFromIndex[ScaleTablesList->IndexOfName
 			(ScaleNum)];
 
-		if (!TableName.IsEmpty()) {
+		if (!IsEmpty(TableName)) {
 			int Index = cboxTable->Items->IndexOf(TableName);
+
 			if (Index > -1) {
 				cboxTable->ItemIndex = Index;
 				cboxTableChange(this);
@@ -247,41 +374,21 @@ void __fastcall TMain::cboxScalesChange(TObject *Sender) {
 		}
 	}
 
-	String S, D1, D2;
+	MakeInProcess = false;
 
-	if (cboxScales->ItemIndex == 0) {
-		S = "";
-	}
-	else {
-		if (ScaleNamesList->Count > 0) {
-			S = "scales=" + ScaleNamesList->Names[cboxScales->ItemIndex];
-		}
-	}
-
-	if (cboxDateDay->Checked) {
-		dtpDateTo->DateTime = dtpDateFrom->DateTime + 1;
-	}
-
-	DateTimeToString(D1, "yyyyMMdd000000", dtpDateFrom->Date);
-	DateTimeToString(D2, "yyyyMMdd000000", dtpDateTo->Date);
-
-	S = ConcatStrings(S, "bdatetime>=" + D1 + " and bdatetime<" + D2, " and ");
-
-	S = ConcatStrings(S, eWhereAdd->Text, " and ");
-
-	eWhere->Text = S;
+	UpdateWhere();
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMain::FormKeyUp(TObject *Sender, WORD &Key, TShiftState Shift)
-{
+void __fastcall TMain::FormKeyUp(TObject * Sender, WORD & Key,
+	TShiftState Shift) {
 	if (Shift.Empty() && (Key == VK_F9)) {
 		btnPerform->Click();
 	}
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMain::btnPerformClick(TObject *Sender) {
+void __fastcall TMain::btnPerformClick(TObject * Sender) {
 	ShowWaitCursor();
 
 	UpdateRecordCount(-1);
@@ -291,7 +398,7 @@ void __fastcall TMain::btnPerformClick(TObject *Sender) {
 		ADOConnection->Close();
 
 		ADOConnection->ConnectionString =
-			Format("DRIVER={MySQL ODBC 3.51 Driver}; SERVER=%s; PORT=%s; DATABASE=%s; USER=%s; PASSWORD=%s; OPTION=3;",
+			Format(IDS_MYSQL_CONNECTION,
 			ARRAYOFCONST((eServerIP->Text, eServerPort->Text, eDataBase->Text,
 			eUser->Text, ePass->Text)));
 
@@ -307,23 +414,42 @@ void __fastcall TMain::btnPerformClick(TObject *Sender) {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMain::btnUnixTimeClick(TObject *Sender) {
+void __fastcall TMain::btnUnixTimeClick(TObject * Sender) {
 	frmUnixTime->Visible = !frmUnixTime->Visible;
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMain::FormShow(TObject *Sender) {
+void __fastcall TMain::FormShow(TObject * Sender) {
 	// frmUnixTime->Show();
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMain::DataSourceDataChange(TObject *Sender, TField *Field) {
+void __fastcall TMain::DataSourceDataChange(TObject * Sender, TField * Field) {
 	UpdateRecordCount(ADODataSet->RecordCount);
 	UpdateRecordNo(-1);
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMain::ADODataSetAfterScroll(TDataSet *DataSet) {
+void __fastcall TMain::ADODataSetAfterScroll(TDataSet * DataSet) {
 	UpdateRecordNo(ADODataSet->RecNo);
 }
+
+// ---------------------------------------------------------------------------
+void __fastcall TMain::eOrderChange(TObject * Sender) {
+	if (MakeInProcess) {
+		return;
+	}
+
+	UpdateQuery();
+}
+
+// ---------------------------------------------------------------------------
+void __fastcall TMain::dtpDateFromChange(TObject * Sender) {
+	if (MakeInProcess) {
+		return;
+	}
+
+	UpdateWhere();
+}
+
 // ---------------------------------------------------------------------------

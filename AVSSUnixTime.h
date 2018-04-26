@@ -15,8 +15,7 @@ enum TEditTag {
 
 // ---------------------------------------------------------------------------
 class TfrmUnixTime : public TForm {
-__published: // IDE-managed Components
-
+__published:
 	TLabeledEdit *eDateTimeWin;
 	TLabeledEdit *eDateTimeSQL;
 	TLabeledEdit *eUnixTime;
@@ -25,15 +24,13 @@ __published: // IDE-managed Components
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall eDateTimeWinChange(TObject *Sender);
-	void __fastcall eDateTimeWinSubLabelMouseDown(TObject *Sender, TMouseButton Button,
-          TShiftState Shift, int X, int Y);
+	void __fastcall eDateTimeWinSubLabelMouseDown(TObject *Sender,
+		TMouseButton Button, TShiftState Shift, int X, int Y);
 
-private: // User declarations
-
+private:
 	bool SelfChange;
 
-public: // User declarations
-
+public:
 	__fastcall TfrmUnixTime(TComponent* Owner);
 };
 
