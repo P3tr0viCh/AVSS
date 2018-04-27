@@ -4,8 +4,8 @@
 #pragma hdrstop
 #include <tchar.h>
 //---------------------------------------------------------------------------
-USEFORM("AVSSUnixTime.cpp", frmUnixTime);
 USEFORM("AVSSMain.cpp", Main);
+USEFORM("AVSSUnixTime.cpp", frmUnixTime);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

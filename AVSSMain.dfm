@@ -301,7 +301,6 @@ object Main: TMain
         Text = #1053#1086#1084#1077#1088' '#1079#1072#1087#1080#1089#1080': %d'
         Width = 50
       end>
-    ExplicitTop = 471
   end
   object DBNavigator: TDBNavigator
     Left = 0
@@ -312,7 +311,6 @@ object Main: TMain
     VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbPost, nbCancel]
     Align = alBottom
     TabOrder = 3
-    ExplicitTop = 376
   end
   object pnlBottom: TPanel
     Left = 0
@@ -322,16 +320,13 @@ object Main: TMain
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 4
-    ExplicitTop = 401
-    object eServerIP: TLabeledEdit
-      Left = 18
-      Top = 30
-      Width = 120
-      Height = 25
-      EditLabel.Width = 50
-      EditLabel.Height = 17
-      EditLabel.Caption = 'IP-'#1072#1076#1088#1077#1089
-      TabOrder = 0
+    object lblServerHost: TLabel
+      Left = 16
+      Top = 10
+      Width = 36
+      Height = 17
+      Caption = #1040#1076#1088#1077#1089
+      FocusControl = cboxServerHost
     end
     object eServerPort: TLabeledEdit
       Left = 144
@@ -341,7 +336,7 @@ object Main: TMain
       EditLabel.Width = 30
       EditLabel.Height = 17
       EditLabel.Caption = #1055#1086#1088#1090
-      TabOrder = 1
+      TabOrder = 0
     end
     object eDataBase: TLabeledEdit
       Left = 220
@@ -351,7 +346,7 @@ object Main: TMain
       EditLabel.Width = 74
       EditLabel.Height = 17
       EditLabel.Caption = #1041#1072#1079#1072' '#1076#1072#1085#1085#1099#1093
-      TabOrder = 2
+      TabOrder = 1
     end
     object eUser: TLabeledEdit
       Left = 346
@@ -361,7 +356,7 @@ object Main: TMain
       EditLabel.Width = 85
       EditLabel.Height = 17
       EditLabel.Caption = #1055#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1100
-      TabOrder = 3
+      TabOrder = 2
     end
     object ePass: TLabeledEdit
       Left = 472
@@ -372,7 +367,7 @@ object Main: TMain
       EditLabel.Height = 17
       EditLabel.Caption = #1055#1072#1088#1086#1083#1100
       PasswordChar = '#'
-      TabOrder = 4
+      TabOrder = 3
     end
     object cboxPassSave: TCheckBox
       Left = 598
@@ -380,7 +375,15 @@ object Main: TMain
       Width = 97
       Height = 17
       Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+      TabOrder = 4
+    end
+    object cboxServerHost: TComboBox
+      Left = 16
+      Top = 30
+      Width = 122
+      Height = 25
       TabOrder = 5
+      OnChange = cboxServerHostChange
     end
   end
   object ADOConnection: TADOConnection

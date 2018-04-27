@@ -15,6 +15,8 @@
 #include <Vcl.ExtCtrls.hpp>
 #include <Vcl.Grids.hpp>
 
+#include "AVSSTConnectionInfo.h"
+
 // ---------------------------------------------------------------------------
 class TMain : public TForm {
 __published:
@@ -41,7 +43,6 @@ __published:
 	TStatusBar *StatusBar;
 	TDBNavigator *DBNavigator;
 	TPanel *pnlBottom;
-	TLabeledEdit *eServerIP;
 	TLabeledEdit *eServerPort;
 	TLabeledEdit *eDataBase;
 	TLabeledEdit *eUser;
@@ -56,6 +57,8 @@ __published:
 	TLabel *lblWhereAdd;
 	TDateTimePicker *dtpTimeTo;
 	TDateTimePicker *dtpTimeFrom;
+	TComboBox *cboxServerHost;
+	TLabel *lblServerHost;
 
 	void __fastcall btnCloseClick(TObject *Sender);
 	void __fastcall btnAboutClick(TObject *Sender);
@@ -73,8 +76,11 @@ __published:
 	void __fastcall ADODataSetAfterScroll(TDataSet *DataSet);
 	void __fastcall eOrderChange(TObject *Sender);
 	void __fastcall dtpDateFromChange(TObject *Sender);
+	void __fastcall cboxServerHostChange(TObject *Sender);
 
 private:
+	TConnectionInfoList * ConnectionInfoList;
+
 	TStringList * ScaleNamesList;
 	TStringList * ScaleTablesList;
 	TStringList * TablesList;

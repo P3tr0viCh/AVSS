@@ -74,6 +74,8 @@ void TMain::UpdateRecordNo(int RecordNo) {
 
 // ---------------------------------------------------------------------------
 void __fastcall TMain::FormCreate(TObject *Sender) {
+	ConnectionInfoList = new TConnectionInfoList();
+
 	ScaleNamesList = new TStringList;
 	ScaleTablesList = new TStringList;
 	TablesList = new TStringList;
@@ -101,7 +103,7 @@ void __fastcall TMain::FormCreate(TObject *Sender) {
 
 		eOrder->Text = FileIni->ReadString("Query", "Order", "");
 
-		eServerIP->Text = FileIni->ReadString("Connection", "IP", "");
+		cboxServerHost->Text = FileIni->ReadString("Connection", "Host", "");
 		eServerPort->Text = FileIni->ReadString("Connection", "Port", "");
 		eDataBase->Text = FileIni->ReadString("Connection", "DB", "");
 		eUser->Text = FileIni->ReadString("Connection", "User", "");
@@ -112,6 +114,41 @@ void __fastcall TMain::FormCreate(TObject *Sender) {
 		ePass->Text =
 			EncryptDecrypt(FromBase64(FileIni->ReadString("Connection",
 			"Pass", "")));
+
+		TConnectionInfo * ConnectionInfo;
+
+		String Section;
+
+		int Count = FileIni->ReadInteger("Connections", "Count", 0);
+
+		for (int i = 0; i < Count; i++) {
+			Section = "Connection_" + IntToStr(i);
+
+			if (!FileIni->SectionExists(Section)) {
+				continue;
+			}
+
+			ConnectionInfo = new TConnectionInfo();
+
+			ConnectionInfo->Host = FileIni->ReadString(Section, "Host", "");
+			ConnectionInfo->Port = FileIni->ReadString(Section, "Port", "");
+			ConnectionInfo->Database =
+				FileIni->ReadString("Connection", "DB", "");
+			ConnectionInfo->User = FileIni->ReadString(Section, "User", "");
+			ConnectionInfo->Password =
+				EncryptDecrypt(FromBase64(FileIni->ReadString(Section,
+				"Pass", "")));
+
+			ConnectionInfoList->Add(ConnectionInfo);
+		}
+
+		for (int i = 0; i < ConnectionInfoList->Count; i++) {
+			if (IsEmpty(ConnectionInfoList->Items[i]->Host)) {
+				continue;
+			}
+
+			cboxServerHost->Items->Add(ConnectionInfoList->Items[i]->Host);
+		}
 
 		FileIni->ReadSectionValues("ScaleNames", ScaleNamesList);
 
@@ -171,7 +208,7 @@ void __fastcall TMain::FormDestroy(TObject * Sender) {
 		FileIni->WriteString("Query", "WhereAdd", eWhereAdd->Text);
 		FileIni->WriteString("Query", "Order", eOrder->Text);
 
-		FileIni->WriteString("Connection", "IP", eServerIP->Text);
+		FileIni->WriteString("Connection", "Host", cboxServerHost->Text);
 		FileIni->WriteString("Connection", "Port", eServerPort->Text);
 		FileIni->WriteString("Connection", "DB", eDataBase->Text);
 		FileIni->WriteString("Connection", "User", eUser->Text);
@@ -195,6 +232,8 @@ void __fastcall TMain::FormDestroy(TObject * Sender) {
 	TablesList->Free();
 	ScaleTablesList->Free();
 	ScaleNamesList->Free();
+
+	ConnectionInfoList->Free();
 }
 
 // ---------------------------------------------------------------------------
@@ -399,8 +438,8 @@ void __fastcall TMain::btnPerformClick(TObject * Sender) {
 
 		ADOConnection->ConnectionString =
 			Format(IDS_MYSQL_CONNECTION,
-			ARRAYOFCONST((eServerIP->Text, eServerPort->Text, eDataBase->Text,
-			eUser->Text, ePass->Text)));
+			ARRAYOFCONST((cboxServerHost->Text, eServerPort->Text,
+			eDataBase->Text, eUser->Text, ePass->Text)));
 
 		ADOConnection->Open();
 
@@ -452,4 +491,23 @@ void __fastcall TMain::dtpDateFromChange(TObject * Sender) {
 	UpdateWhere();
 }
 
+// ---------------------------------------------------------------------------
+void __fastcall TMain::cboxServerHostChange(TObject *Sender) {
+	if (MakeInProcess) {
+		return;
+	}
+
+	if (cboxServerHost->ItemIndex < 0) {
+		return;
+	}
+
+	for (int i = 0; i < ConnectionInfoList->Count; i++) {
+		if (ConnectionInfoList->Items[i]->Host == cboxServerHost->Text) {
+			eServerPort->Text = ConnectionInfoList->Items[i]->Port;
+			eDataBase->Text = ConnectionInfoList->Items[i]->Database;
+			eUser->Text = ConnectionInfoList->Items[i]->User;
+			ePass->Text = ConnectionInfoList->Items[i]->Password;
+		}
+	}
+}
 // ---------------------------------------------------------------------------
