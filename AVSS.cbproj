@@ -53,13 +53,13 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <Icon_MainIcon>AVSS_Icon.ico</Icon_MainIcon>
-        <ILINK_LibraryPath>..\!UtilsAndComps\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <ILINK_LibraryPath>..\!UtilsAndComps\;C:\Docs\Projects\C++ Builder\!UtilsAndComps;C:\Docs\Projects\C++ Builder\CryptoPP;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <SanitizedProjectName>AVSS</SanitizedProjectName>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
         <_TCHARMapping>wchar_t</_TCHARMapping>
         <Multithreaded>true</Multithreaded>
-        <IncludePath>..\!UtilsAndComps\;$(IncludePath)</IncludePath>
+        <IncludePath>..\!UtilsAndComps\;C:\Docs\Projects\C++ Builder\!UtilsAndComps;C:\Docs\Projects\C++ Builder\CryptoPP\cryptopp700;$(IncludePath)</IncludePath>
         <VerInfo_Locale>1049</VerInfo_Locale>
         <ProjectType>CppVCLApplication</ProjectType>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
@@ -75,16 +75,16 @@
         <ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\release\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <VerInfo_MinorVer>3</VerInfo_MinorVer>
+        <VerInfo_MinorVer>4</VerInfo_MinorVer>
         <PackageImports>adortl;appanalytics;bcbie;bcbsmp;bindcomp;bindcompdbx;bindcompfmx;bindcompvcl;bindengine;CloudService;CodeSiteExpressPkg;CustomIPTransport;DataSnapClient;DataSnapCommon;DataSnapConnectors;DatasnapConnectorsFreePascal;DataSnapFireDAC;DataSnapIndy10ServerTransport;DataSnapNativeClient;DataSnapProviderClient;DataSnapServer;DataSnapServerMidas;dbexpress;dbrtl;dbxcds;DbxClientDriver;DbxCommonDriver;DBXDb2Driver;DBXFirebirdDriver;DBXInformixDriver;DBXInterBaseDriver;DBXMSSQLDriver;DBXMySQLDriver;DBXOdbcDriver;DBXOracleDriver;DBXSqliteDriver;DBXSybaseASADriver;DBXSybaseASEDriver;dsnap;dsnapcon;dsnapxml;emsclient;emsclientfiredac;FireDAC;FireDACADSDriver;FireDACASADriver;FireDACCommon;FireDACCommonDriver;FireDACDb2Driver;FireDACDBXDriver;FireDACDSDriver;FireDACIBDriver;FireDACInfxDriver;FireDACMSAccDriver;FireDACMSSQLDriver;FireDACMySQLDriver;FireDACODBCDriver;FireDACOracleDriver;FireDACPgDriver;FireDACSqliteDriver;FireDACTDataDriver;fmx;fmxase;fmxdae;fmxFireDAC;fmxobj;FMXTee;FmxTeeUI;frx22;frxDB22;frxe22;frxTee22;IndyCore;IndyIPClient;IndyIPCommon;IndyIPServer;IndyProtocols;IndySystem;inet;inetdb;inetdbxpress;Intraweb;RESTBackendComponents;RESTComponents;rtl;soapmidas;soaprtl;soapserver;svn;Tee;TeeDB;TeeUI;tethering;vcl;vclactnband;vcldb;vcldsnap;vclFireDAC;vclie;vclimg;VCLRESTComponents;vclribbon;VclSmp;vcltouch;vclx;xmlrtl;$(PackageImports)</PackageImports>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <IncludePath>$(BDSINCLUDE)\windows\vcl;$(IncludePath)</IncludePath>
-        <VerInfo_Keys>CompanyName=П3тр0виЧъ;FileDescription=Работа с интеграционным сервером весовых систем;FileVersion=1.3.1.0;InternalName=AVSS;LegalCopyright=© П3тр0виЧъ;LegalTrademarks=П3тр0виЧъ;OriginalFilename=AVSS.exe;ProductName=Работа с ИСВС;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=П3тр0виЧъ;FileDescription=Работа с интеграционным сервером весовых систем;FileVersion=1.4.0.0;InternalName=AVSS;LegalCopyright=© П3тр0виЧъ;LegalTrademarks=П3тр0виЧъ;OriginalFilename=AVSS.exe;ProductName=Работа с ИСВС;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
         <UWP_CppLogo44>$(BDS)\bin\Artwork\Windows\UWP\cppreg_UwpDefault_44.png</UWP_CppLogo44>
         <UWP_CppLogo150>$(BDS)\bin\Artwork\Windows\UWP\cppreg_UwpDefault_150.png</UWP_CppLogo150>
-        <VerInfo_Release>1</VerInfo_Release>
+        <ILINK_LibraryPath>C:\Docs\Projects\C++ Builder\CryptoPP\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <PackageImports>adortl;appanalytics;bindcomp;bindcompdbx;bindcompfmx;bindcompvcl;bindengine;CloudService;CustomIPTransport;DataSnapClient;DataSnapCommon;DataSnapConnectors;DatasnapConnectorsFreePascal;DataSnapFireDAC;DataSnapIndy10ServerTransport;DataSnapNativeClient;DataSnapProviderClient;DataSnapServer;DataSnapServerMidas;dbexpress;dbrtl;dbxcds;DbxClientDriver;DbxCommonDriver;DBXDb2Driver;DBXFirebirdDriver;DBXInformixDriver;DBXInterBaseDriver;DBXMSSQLDriver;DBXMySQLDriver;DBXOdbcDriver;DBXOracleDriver;DBXSqliteDriver;DBXSybaseASADriver;DBXSybaseASEDriver;dsnap;dsnapcon;dsnapxml;emsclient;emsclientfiredac;FireDAC;FireDACADSDriver;FireDACASADriver;FireDACCommon;FireDACCommonDriver;FireDACDb2Driver;FireDACDBXDriver;FireDACDSDriver;FireDACIBDriver;FireDACInfxDriver;FireDACMSAccDriver;FireDACMSSQLDriver;FireDACMySQLDriver;FireDACODBCDriver;FireDACOracleDriver;FireDACPgDriver;FireDACSqliteDriver;FireDACTDataDriver;fmx;fmxase;fmxdae;fmxFireDAC;fmxobj;FMXTee;FmxTeeUI;IndyCore;IndyIPClient;IndyIPCommon;IndyIPServer;IndyProtocols;IndySystem;inet;inetdb;inetdbxpress;Intraweb;RESTBackendComponents;RESTComponents;rtl;soapmidas;soaprtl;soapserver;Tee;TeeDB;TeeUI;tethering;vcl;vclactnband;vcldb;vcldsnap;vclFireDAC;vclie;vclimg;VCLRESTComponents;vclribbon;VclSmp;vcltouch;vclx;xmlrtl;$(PackageImports)</PackageImports>
@@ -116,27 +116,25 @@
         <ILINK_TranslatedLibraryPath>$(BDSLIB)\$(PLATFORM)\debug\$(LANGDIR);$(ILINK_TranslatedLibraryPath)</ILINK_TranslatedLibraryPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <VerInfo_Keys>CompanyName=П3тр0виЧъ;FileDescription=Работа с интеграционным сервером весовых систем;FileVersion=1.3.1.0;InternalName=AVSS;LegalCopyright=© П3тр0виЧъ;LegalTrademarks=П3тр0виЧъ;OriginalFilename=AVSS.exe;ProductName=Работа с ИСВС;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
-        <VerInfo_MinorVer>3</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=П3тр0виЧъ;FileDescription=Работа с интеграционным сервером весовых систем;FileVersion=1.4.0.0;InternalName=AVSS;LegalCopyright=© П3тр0виЧъ;LegalTrademarks=П3тр0виЧъ;OriginalFilename=AVSS.exe;ProductName=Работа с ИСВС;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_MinorVer>4</VerInfo_MinorVer>
         <LinkPackageImports>rtl.bpi;vcl.bpi;dbrtl.bpi;vcldb.bpi;adortl.bpi</LinkPackageImports>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Release>1</VerInfo_Release>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <Defines>NDEBUG;$(Defines)</Defines>
         <TASM_Debugging>None</TASM_Debugging>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <VerInfo_Keys>CompanyName=П3тр0виЧъ;FileDescription=Работа с интеграционным сервером весовых систем;FileVersion=1.3.1.0;InternalName=AVSS;LegalCopyright=© П3тр0виЧъ;LegalTrademarks=П3тр0виЧъ;OriginalFilename=AVSS.exe;ProductName=Работа с ИСВС;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
-        <VerInfo_MinorVer>3</VerInfo_MinorVer>
+        <VerInfo_Keys>CompanyName=П3тр0виЧъ;FileDescription=Работа с интеграционным сервером весовых систем;FileVersion=1.4.0.0;InternalName=AVSS;LegalCopyright=© П3тр0виЧъ;LegalTrademarks=П3тр0виЧъ;OriginalFilename=AVSS.exe;ProductName=Работа с ИСВС;ProductVersion=1.0.0.0;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_MinorVer>4</VerInfo_MinorVer>
         <LinkPackageStatics>rtl.lib;vcl.lib;dbrtl.lib;vcldb.lib;adortl.lib</LinkPackageStatics>
         <UsePackages>false</UsePackages>
         <DynamicRTL>false</DynamicRTL>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <BT_BuildType>Debug</BT_BuildType>
-        <VerInfo_Release>1</VerInfo_Release>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <BCC_PCHName_Clang>AVSSPCH.h</BCC_PCHName_Clang>
@@ -164,6 +162,10 @@
         <CppCompile Include="..\!UtilsAndComps\UtilsCPUSpeed.cpp">
             <DependentOn>..\!UtilsAndComps\UtilsCPUSpeed.h</DependentOn>
             <BuildOrder>5</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\!UtilsAndComps\UtilsCryptoPP.cpp">
+            <DependentOn>..\!UtilsAndComps\UtilsCryptoPP.h</DependentOn>
+            <BuildOrder>20</BuildOrder>
         </CppCompile>
         <CppCompile Include="..\!UtilsAndComps\UtilsFileIni.cpp">
             <DependentOn>..\!UtilsAndComps\UtilsFileIni.h</DependentOn>
@@ -195,6 +197,9 @@
         <CppCompile Include="AVSS.cpp">
             <BuildOrder>0</BuildOrder>
         </CppCompile>
+        <None Include="AVSSEncKey.h">
+            <BuildOrder>22</BuildOrder>
+        </None>
         <CppCompile Include="AVSSMain.cpp">
             <Form>Main</Form>
             <FormType>dfm</FormType>
@@ -222,6 +227,10 @@
             <DependentOn>AVSSUnixTime.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
+        <LibFiles Include="..\CryptoPP\CryptoPP.lib" Condition="'$(Platform)'=='Win32'">
+            <BuildOrder>21</BuildOrder>
+            <IgnorePath>true</IgnorePath>
+        </LibFiles>
         <FormResources Include="AVSSMain.dfm"/>
         <FormResources Include="AVSSUnixTime.dfm"/>
         <BuildConfiguration Include="Release">
@@ -295,6 +304,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'" LocalName="$(BDS)\bin\cc32220.dll" Class="DependencyModule"/>
                 <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
                     <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
@@ -306,7 +316,18 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'" LocalName="$(BDS)\bin\cc32220.dll" Class="DependencyModule"/>
+                <DeployFile LocalName="..\..\..\Projects.exe\AVSS\Win32\Debug\AVSS.tds" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win32">
+                        <RemoteName>AVSS.tds</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\CryptoPP\CryptoPP.lib" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'" LocalName="$(BDS)\bin\cc32250.dll" Class="DependencyModule">
                     <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
@@ -315,6 +336,12 @@
                 <DeployFile LocalName="..\..\..\Projects.exe\AVSS\Win32\Debug\AVSS.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>AVSS.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\CryptoPP\CryptoPP.lib" Configuration="Release" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

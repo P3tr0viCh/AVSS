@@ -6,6 +6,8 @@
 #include "AVSSMain.h"
 #include "AVSSUnixTime.h"
 
+#include "AVSSEncKey.h"
+
 #include "AVSSStrings.h"
 
 #include "AboutFrm.h"
@@ -14,6 +16,7 @@
 #include "UtilsStr.h"
 #include "UtilsMisc.h"
 #include "UtilsBase64.h"
+#include "UtilsCryptoPP.h"
 
 // ---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -39,18 +42,6 @@ void __fastcall TMain::btnAboutClick(TObject *Sender) {
 }
 
 // ---------------------------------------------------------------------------
-String EncryptDecrypt(String S) {
-	Char key[3] = {'V', 'Y', 'P'};
-	String output = S;
-
-	for (int i = 1; i <= S.Length(); i++) {
-		output[i] = S[i] ^ key[i % (sizeof(key) / sizeof(Char))];
-	}
-
-	return output;
-}
-
-// ---------------------------------------------------------------------------
 void TMain::UpdateRecordCount(int RecordCount) {
 	if (RecordCount > -1) {
 		StatusBar->Panels->Items[1]->Text =
@@ -69,6 +60,34 @@ void TMain::UpdateRecordNo(int RecordNo) {
 	}
 	else {
 		StatusBar->Panels->Items[2]->Text = "";
+	}
+}
+
+// ---------------------------------------------------------------------------
+String TMain::Decrypt(String Text) {
+	if (IsEmpty(Text)) {
+		return "";
+	}
+
+	try {
+		return DecryptAES(Text, ENC_KEY);
+	}
+	catch (...) {
+		return "";
+	}
+}
+
+// ---------------------------------------------------------------------------
+String TMain::Encrypt(String Text) {
+	if (IsEmpty(Text)) {
+		return "";
+	}
+
+	try {
+		return EncryptAES(Text, ENC_KEY);
+	}
+	catch (...) {
+		return "";
 	}
 }
 
@@ -111,9 +130,7 @@ void __fastcall TMain::FormCreate(TObject *Sender) {
 		cboxPassSave->Checked = FileIni->ReadBool("Connection",
 			"PassSave", false);
 
-		ePass->Text =
-			EncryptDecrypt(FromBase64(FileIni->ReadString("Connection",
-			"Pass", "")));
+		ePass->Text = Decrypt(FileIni->ReadString("Connection", "Pass", ""));
 
 		TConnectionInfo * ConnectionInfo;
 
@@ -136,8 +153,7 @@ void __fastcall TMain::FormCreate(TObject *Sender) {
 				FileIni->ReadString("Connection", "DB", "");
 			ConnectionInfo->User = FileIni->ReadString(Section, "User", "");
 			ConnectionInfo->Password =
-				EncryptDecrypt(FromBase64(FileIni->ReadString(Section,
-				"Pass", "")));
+				Decrypt(FileIni->ReadString(Section, "Pass", ""));
 
 			ConnectionInfoList->Add(ConnectionInfo);
 		}
@@ -215,8 +231,7 @@ void __fastcall TMain::FormDestroy(TObject * Sender) {
 
 		FileIni->WriteBool("Connection", "PassSave", cboxPassSave->Checked);
 		if (cboxPassSave->Checked) {
-			FileIni->WriteString("Connection", "Pass",
-				ToBase64(EncryptDecrypt(ePass->Text)));
+			FileIni->WriteString("Connection", "Pass", Encrypt(ePass->Text));
 		}
 		else {
 			FileIni->WriteString("Connection", "Pass", "");
@@ -492,7 +507,7 @@ void __fastcall TMain::dtpDateFromChange(TObject * Sender) {
 }
 
 // ---------------------------------------------------------------------------
-void __fastcall TMain::cboxServerHostChange(TObject *Sender) {
+void __fastcall TMain::cboxServerHostChange(TObject * Sender) {
 	if (MakeInProcess) {
 		return;
 	}

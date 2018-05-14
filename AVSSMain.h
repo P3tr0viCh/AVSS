@@ -88,6 +88,9 @@ private:
 	TStringList * OrderByList;
 	TStringList * DateTimeFieldList;
 
+	String Decrypt(String Text);
+	String Encrypt(String Text);
+
 	bool MakeInProcess;
 
 	void UpdateRecordCount(int RecordCount);
