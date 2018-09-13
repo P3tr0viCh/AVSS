@@ -16,6 +16,8 @@
 #include <Vcl.Grids.hpp>
 
 #include "AVSSTConnectionInfo.h"
+#include <Vcl.Dialogs.hpp>
+#include <Vcl.ExtDlgs.hpp>
 
 // ---------------------------------------------------------------------------
 class TMain : public TForm {
@@ -41,10 +43,8 @@ __published:
 	TButton *btnClose;
 	TButton *btnAbout;
 	TStatusBar *StatusBar;
-	TDBNavigator *DBNavigator;
 	TPanel *pnlBottom;
 	TLabeledEdit *eServerPort;
-	TLabeledEdit *eDataBase;
 	TLabeledEdit *eUser;
 	TLabeledEdit *ePass;
 	TCheckBox *cboxPassSave;
@@ -59,6 +59,13 @@ __published:
 	TDateTimePicker *dtpTimeFrom;
 	TComboBox *cboxServerHost;
 	TLabel *lblServerHost;
+	TPanel *pnlNavigator;
+	TDBNavigator *DBNavigator;
+	TSaveTextFileDialog *SaveTextFileDialog;
+	TPanel *pnlDBButtons;
+	TButton *btnSaveToFile;
+	TLabel *lblDataBase;
+	TComboBox *cboxDataBase;
 
 	void __fastcall btnCloseClick(TObject *Sender);
 	void __fastcall btnAboutClick(TObject *Sender);
@@ -77,9 +84,12 @@ __published:
 	void __fastcall eOrderChange(TObject *Sender);
 	void __fastcall dtpDateFromChange(TObject *Sender);
 	void __fastcall cboxServerHostChange(TObject *Sender);
+	void __fastcall btnSaveToFileClick(TObject *Sender);
 
 private:
 	TConnectionInfoList * ConnectionInfoList;
+
+	TStringList * DBList;
 
 	TStringList * ScaleNamesList;
 	TStringList * ScaleTablesList;
@@ -98,6 +108,8 @@ private:
 
 	void UpdateQuery();
 	void UpdateWhere();
+
+    void SaveDataToFile(String FileName);
 
 public:
 	__fastcall TMain(TComponent* Owner);

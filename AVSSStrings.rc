@@ -14,6 +14,11 @@ IDS_TEXT_RECORD_COUNT,
 IDS_TEXT_RECORD_NUM,
         "Номер записи: %d"
 
+IDS_ERROR_DATASET_EMPTY,
+        "Пустой набор данных"
+IDS_ERROR_DATASET_SAVE,
+        "Не удалось сохранить данные в файл:\n\n%s"
+
 IDS_MYSQL_CONNECTION,
         "DRIVER={MySQL ODBC 3.51 Driver}; SERVER=%s; PORT=%s; DATABASE=%s; USER=%s; PASSWORD=%s; OPTION=3;"
 

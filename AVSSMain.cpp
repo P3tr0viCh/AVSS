@@ -15,7 +15,6 @@
 #include "UtilsFileIni.h"
 #include "UtilsStr.h"
 #include "UtilsMisc.h"
-#include "UtilsBase64.h"
 #include "UtilsCryptoPP.h"
 
 // ---------------------------------------------------------------------------
@@ -95,6 +94,8 @@ String TMain::Encrypt(String Text) {
 void __fastcall TMain::FormCreate(TObject *Sender) {
 	ConnectionInfoList = new TConnectionInfoList();
 
+	DBList = new TStringList;
+
 	ScaleNamesList = new TStringList;
 	ScaleTablesList = new TStringList;
 	TablesList = new TStringList;
@@ -124,13 +125,27 @@ void __fastcall TMain::FormCreate(TObject *Sender) {
 
 		cboxServerHost->Text = FileIni->ReadString("Connection", "Host", "");
 		eServerPort->Text = FileIni->ReadString("Connection", "Port", "");
-		eDataBase->Text = FileIni->ReadString("Connection", "DB", "");
+
+		cboxDataBase->Text = FileIni->ReadString("Connection", "DB", "");
+
 		eUser->Text = FileIni->ReadString("Connection", "User", "");
+		ePass->Text = Decrypt(FileIni->ReadString("Connection", "Pass", ""));
 
 		cboxPassSave->Checked = FileIni->ReadBool("Connection",
 			"PassSave", false);
 
-		ePass->Text = Decrypt(FileIni->ReadString("Connection", "Pass", ""));
+		TStringList * DBListIdents = new TStringList;
+		FileIni->ReadSectionValues("Databases", DBListIdents);
+		for (int i = 0; i < DBListIdents->Count; i++) {
+			DBList->Add(DBListIdents->Values[i]);
+		}
+		DBListIdents->Free();
+
+		if (!IsEmpty(cboxDataBase->Text) && DBList->IndexOf
+			(cboxDataBase->Text) < 0) {
+			DBList->Insert(0, cboxDataBase->Text);
+		}
+		cboxDataBase->Items->Assign(DBList);
 
 		TConnectionInfo * ConnectionInfo;
 
@@ -226,7 +241,7 @@ void __fastcall TMain::FormDestroy(TObject * Sender) {
 
 		FileIni->WriteString("Connection", "Host", cboxServerHost->Text);
 		FileIni->WriteString("Connection", "Port", eServerPort->Text);
-		FileIni->WriteString("Connection", "DB", eDataBase->Text);
+		FileIni->WriteString("Connection", "DB", cboxDataBase->Text);
 		FileIni->WriteString("Connection", "User", eUser->Text);
 
 		FileIni->WriteBool("Connection", "PassSave", cboxPassSave->Checked);
@@ -247,6 +262,8 @@ void __fastcall TMain::FormDestroy(TObject * Sender) {
 	TablesList->Free();
 	ScaleTablesList->Free();
 	ScaleNamesList->Free();
+
+	DBList->Free();
 
 	ConnectionInfoList->Free();
 }
@@ -454,7 +471,7 @@ void __fastcall TMain::btnPerformClick(TObject * Sender) {
 		ADOConnection->ConnectionString =
 			Format(IDS_MYSQL_CONNECTION,
 			ARRAYOFCONST((cboxServerHost->Text, eServerPort->Text,
-			eDataBase->Text, eUser->Text, ePass->Text)));
+			cboxDataBase->Text, eUser->Text, ePass->Text)));
 
 		ADOConnection->Open();
 
@@ -519,10 +536,71 @@ void __fastcall TMain::cboxServerHostChange(TObject * Sender) {
 	for (int i = 0; i < ConnectionInfoList->Count; i++) {
 		if (ConnectionInfoList->Items[i]->Host == cboxServerHost->Text) {
 			eServerPort->Text = ConnectionInfoList->Items[i]->Port;
-			eDataBase->Text = ConnectionInfoList->Items[i]->Database;
+			cboxDataBase->Text = ConnectionInfoList->Items[i]->Database;
 			eUser->Text = ConnectionInfoList->Items[i]->User;
 			ePass->Text = ConnectionInfoList->Items[i]->Password;
 		}
 	}
 }
+
+// ---------------------------------------------------------------------------
+void __fastcall TMain::btnSaveToFileClick(TObject *Sender) {
+	if (ADODataSet->IsEmpty()) {
+		MsgBoxErr(IDS_ERROR_DATASET_EMPTY);
+		return;
+	}
+
+	if (SaveTextFileDialog->Execute()) {
+		SaveDataToFile(SaveTextFileDialog->FileName);
+	}
+}
+
+// ---------------------------------------------------------------------------
+void TMain::SaveDataToFile(String FileName) {
+	try {
+		TStringList * List = new TStringList();
+
+		String S;
+
+		int CurrentRecordNum;
+
+		try {
+			CurrentRecordNum = ADODataSet->RecNo;
+
+			for (int i = 0; i < ADODataSet->FieldCount; i++) {
+				S += ADODataSet->Fields->Fields[i]->FieldName + ";";
+			}
+
+			List->Add(S);
+
+			DBGrid->DataSource->Enabled = false;
+
+			ADODataSet->First();
+			while (!ADODataSet->Eof) {
+				S = "";
+
+				for (int i = 0; i < ADODataSet->FieldCount; i++) {
+					S += ADODataSet->Fields->Fields[i]->AsString + ";";
+				}
+
+				List->Add(S);
+
+				ADODataSet->Next();
+			}
+
+			List->SaveToFile(FileName);
+		}
+		__finally {
+			delete List;
+
+			DBGrid->DataSource->Enabled = true;
+
+			ADODataSet->RecNo = CurrentRecordNum;
+		}
+	}
+	catch (Exception * E) {
+		MsgBoxErr(Format(IDS_ERROR_DATASET_SAVE, E->Message));
+	}
+}
+
 // ---------------------------------------------------------------------------

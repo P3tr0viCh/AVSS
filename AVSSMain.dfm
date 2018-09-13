@@ -24,7 +24,7 @@ object Main: TMain
     Left = 0
     Top = 307
     Width = 750
-    Height = 134
+    Height = 119
     Align = alClient
     DataSource = DataSource
     Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
@@ -302,16 +302,6 @@ object Main: TMain
         Width = 50
       end>
   end
-  object DBNavigator: TDBNavigator
-    Left = 0
-    Top = 441
-    Width = 750
-    Height = 25
-    DataSource = DataSource
-    VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbPost, nbCancel]
-    Align = alBottom
-    TabOrder = 3
-  end
   object pnlBottom: TPanel
     Left = 0
     Top = 466
@@ -319,7 +309,7 @@ object Main: TMain
     Height = 70
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 4
+    TabOrder = 3
     object lblServerHost: TLabel
       Left = 16
       Top = 10
@@ -327,6 +317,14 @@ object Main: TMain
       Height = 17
       Caption = #1040#1076#1088#1077#1089
       FocusControl = cboxServerHost
+    end
+    object lblDataBase: TLabel
+      Left = 220
+      Top = 10
+      Width = 74
+      Height = 17
+      Caption = #1041#1072#1079#1072' '#1076#1072#1085#1085#1099#1093
+      FocusControl = cboxDataBase
     end
     object eServerPort: TLabeledEdit
       Left = 144
@@ -336,16 +334,6 @@ object Main: TMain
       EditLabel.Width = 30
       EditLabel.Height = 17
       EditLabel.Caption = #1055#1086#1088#1090
-      TabOrder = 0
-    end
-    object eDataBase: TLabeledEdit
-      Left = 220
-      Top = 30
-      Width = 120
-      Height = 25
-      EditLabel.Width = 74
-      EditLabel.Height = 17
-      EditLabel.Caption = #1041#1072#1079#1072' '#1076#1072#1085#1085#1099#1093
       TabOrder = 1
     end
     object eUser: TLabeledEdit
@@ -356,7 +344,7 @@ object Main: TMain
       EditLabel.Width = 85
       EditLabel.Height = 17
       EditLabel.Caption = #1055#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1100
-      TabOrder = 2
+      TabOrder = 3
     end
     object ePass: TLabeledEdit
       Left = 472
@@ -367,7 +355,7 @@ object Main: TMain
       EditLabel.Height = 17
       EditLabel.Caption = #1055#1072#1088#1086#1083#1100
       PasswordChar = '#'
-      TabOrder = 3
+      TabOrder = 4
     end
     object cboxPassSave: TCheckBox
       Left = 598
@@ -375,33 +363,94 @@ object Main: TMain
       Width = 97
       Height = 17
       Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
-      TabOrder = 4
+      TabOrder = 5
     end
     object cboxServerHost: TComboBox
       Left = 16
       Top = 30
       Width = 122
       Height = 25
-      TabOrder = 5
+      TabOrder = 0
       OnChange = cboxServerHostChange
+    end
+    object cboxDataBase: TComboBox
+      Left = 220
+      Top = 30
+      Width = 120
+      Height = 25
+      TabOrder = 2
+      OnChange = cboxServerHostChange
+    end
+  end
+  object pnlNavigator: TPanel
+    Left = 0
+    Top = 426
+    Width = 750
+    Height = 40
+    Align = alBottom
+    BevelOuter = bvNone
+    Padding.Top = 8
+    TabOrder = 4
+    object DBNavigator: TDBNavigator
+      Left = 0
+      Top = 8
+      Width = 622
+      Height = 32
+      DataSource = DataSource
+      VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbPost, nbCancel]
+      Align = alClient
+      TabOrder = 0
+      ExplicitTop = 0
+      ExplicitWidth = 646
+    end
+    object pnlDBButtons: TPanel
+      Left = 622
+      Top = 8
+      Width = 128
+      Height = 32
+      Align = alRight
+      BevelOuter = bvNone
+      Padding.Left = 16
+      Padding.Right = 16
+      TabOrder = 1
+      ExplicitTop = 0
+      object btnSaveToFile: TButton
+        Left = 16
+        Top = 0
+        Width = 96
+        Height = 32
+        Align = alClient
+        Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+        TabOrder = 0
+        OnClick = btnSaveToFileClick
+        ExplicitLeft = 598
+        ExplicitTop = -6
+      end
     end
   end
   object ADOConnection: TADOConnection
     LoginPrompt = False
-    Left = 56
-    Top = 280
+    Left = 136
+    Top = 344
   end
   object DataSource: TDataSource
     DataSet = ADODataSet
     OnDataChange = DataSourceDataChange
-    Left = 136
-    Top = 280
+    Left = 224
+    Top = 344
   end
   object ADODataSet: TADODataSet
     Connection = ADOConnection
     AfterScroll = ADODataSetAfterScroll
     Parameters = <>
-    Left = 208
-    Top = 280
+    Left = 304
+    Top = 344
+  end
+  object SaveTextFileDialog: TSaveTextFileDialog
+    DefaultExt = 'csv'
+    Filter = 'Excel CSV (*.csv)|*.csv|'#1042#1089#1077' '#1092#1072#1081#1083#1099'|*.*'
+    Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
+    Left = 640
+    Top = 336
   end
 end
