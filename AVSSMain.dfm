@@ -2,7 +2,7 @@ object Main: TMain
   Left = 0
   Top = 0
   Caption = #1056#1072#1073#1086#1090#1072' '#1089' '#1080#1085#1090#1077#1075#1088#1072#1094#1080#1086#1085#1085#1099#1084' '#1089#1077#1088#1074#1077#1088#1086#1084' '#1074#1077#1089#1086#1074#1099#1093' '#1089#1080#1089#1090#1077#1084
-  ClientHeight = 555
+  ClientHeight = 626
   ClientWidth = 750
   Color = clBtnFace
   Constraints.MinHeight = 450
@@ -22,9 +22,9 @@ object Main: TMain
   TextHeight = 17
   object DBGrid: TDBGrid
     Left = 0
-    Top = 307
+    Top = 345
     Width = 750
-    Height = 119
+    Height = 152
     Align = alClient
     DataSource = DataSource
     Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
@@ -39,7 +39,7 @@ object Main: TMain
     Left = 0
     Top = 0
     Width = 750
-    Height = 307
+    Height = 345
     Align = alTop
     BevelOuter = bvNone
     Font.Charset = DEFAULT_CHARSET
@@ -49,9 +49,10 @@ object Main: TMain
     Font.Style = []
     ParentFont = False
     TabOrder = 1
+    ExplicitTop = -6
     DesignSize = (
       750
-      307)
+      345)
     object lblScales: TLabel
       Left = 70
       Top = 142
@@ -99,7 +100,7 @@ object Main: TMain
     end
     object lblOrder: TLabel
       Left = 16
-      Top = 263
+      Top = 295
       Width = 42
       Height = 17
       Caption = 'ORDER'
@@ -107,11 +108,27 @@ object Main: TMain
     end
     object lblWhereAdd: TLabel
       Left = 70
-      Top = 233
+      Top = 264
       Width = 22
       Height = 17
       Caption = 'and'
       FocusControl = eWhereAdd
+    end
+    object lblWhereCargotype: TLabel
+      Left = 290
+      Top = 232
+      Width = 85
+      Height = 17
+      Caption = 'cargotype like'
+      FocusControl = eWhereCargotype
+    end
+    object lblWhereVannum: TLabel
+      Left = 70
+      Top = 232
+      Width = 68
+      Height = 17
+      Caption = 'vannum like'
+      FocusControl = eWhereVannum
     end
     object btnPerform: TButton
       Left = 638
@@ -121,7 +138,7 @@ object Main: TMain
       Anchors = [akTop, akRight]
       Caption = #1042#1099#1087#1086#1083#1085#1080#1090#1100
       Default = True
-      TabOrder = 10
+      TabOrder = 15
       OnClick = btnPerformClick
     end
     object eFull: TEdit
@@ -134,12 +151,12 @@ object Main: TMain
       TabOrder = 0
     end
     object eOrder: TEdit
-      Left = 72
-      Top = 260
-      Width = 548
+      Left = 74
+      Top = 292
+      Width = 546
       Height = 25
       Anchors = [akLeft, akTop, akRight]
-      TabOrder = 9
+      TabOrder = 14
       OnChange = eOrderChange
     end
     object cboxScales: TComboBox
@@ -183,7 +200,7 @@ object Main: TMain
       Format = 'yyyy-MM-dd'
       Time = 29674.494996238430000000
       Enabled = False
-      TabOrder = 6
+      TabOrder = 7
       OnChange = dtpDateFromChange
     end
     object cboxFields: TComboBox
@@ -215,7 +232,7 @@ object Main: TMain
       Caption = #1047#1072' '#1089#1091#1090#1082#1080
       Checked = True
       State = cbChecked
-      TabOrder = 7
+      TabOrder = 10
       OnClick = cboxDateDayClick
     end
     object btnClose: TButton
@@ -225,7 +242,7 @@ object Main: TMain
       Height = 32
       Anchors = [akTop, akRight]
       Caption = #1047#1072#1082#1088#1099#1090#1100
-      TabOrder = 13
+      TabOrder = 18
       OnClick = btnCloseClick
     end
     object btnAbout: TButton
@@ -235,7 +252,7 @@ object Main: TMain
       Height = 32
       Anchors = [akTop, akRight]
       Caption = #1054' '#1087#1088#1086#1075#1088#1072#1084#1084#1077
-      TabOrder = 12
+      TabOrder = 17
       OnClick = btnAboutClick
     end
     object btnUnixTime: TButton
@@ -245,16 +262,16 @@ object Main: TMain
       Height = 32
       Anchors = [akTop, akRight]
       Caption = #1070#1085#1080#1082#1089'-'#1074#1088#1077#1084#1103
-      TabOrder = 11
+      TabOrder = 16
       OnClick = btnUnixTimeClick
     end
     object eWhereAdd: TEdit
-      Left = 100
-      Top = 230
-      Width = 520
+      Left = 98
+      Top = 261
+      Width = 522
       Height = 25
       Anchors = [akLeft, akTop, akRight]
-      TabOrder = 8
+      TabOrder = 13
       OnChange = cboxScalesChange
     end
     object dtpTimeTo: TDateTimePicker
@@ -267,7 +284,7 @@ object Main: TMain
       Time = 29674.999988425930000000
       Enabled = False
       Kind = dtkTime
-      TabOrder = 14
+      TabOrder = 8
       OnChange = dtpDateFromChange
     end
     object dtpTimeFrom: TDateTimePicker
@@ -279,13 +296,38 @@ object Main: TMain
       Format = 'HH:mm:ss'
       Time = 29674.000000000000000000
       Kind = dtkTime
-      TabOrder = 15
+      TabOrder = 6
       OnChange = dtpDateFromChange
+    end
+    object eWhereCargotype: TEdit
+      Left = 382
+      Top = 230
+      Width = 238
+      Height = 25
+      TabOrder = 12
+      OnChange = cboxScalesChange
+    end
+    object eWhereVannum: TEdit
+      Left = 146
+      Top = 230
+      Width = 111
+      Height = 25
+      TabOrder = 11
+      OnChange = cboxScalesChange
+    end
+    object btnClearTime: TButton
+      Left = 288
+      Top = 199
+      Width = 76
+      Height = 25
+      Caption = '< '#1057#1073#1088#1086#1089' >'
+      TabOrder = 9
+      OnClick = btnClearTimeClick
     end
   end
   object StatusBar: TStatusBar
     Left = 0
-    Top = 536
+    Top = 607
     Width = 750
     Height = 19
     Panels = <
@@ -301,15 +343,17 @@ object Main: TMain
         Text = #1053#1086#1084#1077#1088' '#1079#1072#1087#1080#1089#1080': %d'
         Width = 50
       end>
+    ExplicitTop = 536
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 466
+    Top = 537
     Width = 750
     Height = 70
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 3
+    ExplicitTop = 466
     object lblServerHost: TLabel
       Left = 16
       Top = 10
@@ -384,13 +428,14 @@ object Main: TMain
   end
   object pnlNavigator: TPanel
     Left = 0
-    Top = 426
+    Top = 497
     Width = 750
     Height = 40
     Align = alBottom
     BevelOuter = bvNone
     Padding.Top = 8
     TabOrder = 4
+    ExplicitTop = 426
     object DBNavigator: TDBNavigator
       Left = 0
       Top = 8
@@ -400,8 +445,6 @@ object Main: TMain
       VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbPost, nbCancel]
       Align = alClient
       TabOrder = 0
-      ExplicitTop = 0
-      ExplicitWidth = 646
     end
     object pnlDBButtons: TPanel
       Left = 622
@@ -413,7 +456,6 @@ object Main: TMain
       Padding.Left = 16
       Padding.Right = 16
       TabOrder = 1
-      ExplicitTop = 0
       object btnSaveToFile: TButton
         Left = 16
         Top = 0
@@ -423,8 +465,6 @@ object Main: TMain
         Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
         TabOrder = 0
         OnClick = btnSaveToFileClick
-        ExplicitLeft = 598
-        ExplicitTop = -6
       end
     end
   end

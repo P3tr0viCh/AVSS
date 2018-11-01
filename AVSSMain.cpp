@@ -119,6 +119,9 @@ void __fastcall TMain::FormCreate(TObject *Sender) {
 
 		eWhere->Text = FileIni->ReadString("Query", "Where", "");
 
+		eWhereVannum->Text = FileIni->ReadString("Query", "WhereVannum", "");
+		eWhereCargotype->Text =
+			FileIni->ReadString("Query", "WhereCargotype", "");
 		eWhereAdd->Text = FileIni->ReadString("Query", "WhereAdd", "");
 
 		eOrder->Text = FileIni->ReadString("Query", "Order", "");
@@ -236,6 +239,8 @@ void __fastcall TMain::FormDestroy(TObject * Sender) {
 		FileIni->WriteString("Query", "Fields", cboxFields->Text);
 		FileIni->WriteString("Query", "Table", cboxTable->Text);
 		FileIni->WriteString("Query", "Where", eWhere->Text);
+		FileIni->WriteString("Query", "WhereVannum", eWhereVannum->Text);
+		FileIni->WriteString("Query", "WhereCargotype", eWhereCargotype->Text);
 		FileIni->WriteString("Query", "WhereAdd", eWhereAdd->Text);
 		FileIni->WriteString("Query", "Order", eOrder->Text);
 
@@ -349,6 +354,20 @@ void TMain::UpdateWhere() {
 		Where = ConcatStrings(Where, DateTimeField + ">=" + D1 + " and " +
 			DateTimeField + "<=" + D2, " and ");
 	}
+
+	String WhereField;
+
+	WhereField = eWhereVannum->Text;
+	if (!IsEmpty(WhereField)) {
+		WhereField = "vannum like '" + WhereField + "'";
+	}
+	Where = ConcatStrings(Where, WhereField, " and ");
+
+	WhereField = eWhereCargotype->Text;
+	if (!IsEmpty(WhereField)) {
+		WhereField = "cargotype like '" + WhereField + "'";
+	}
+	Where = ConcatStrings(Where, WhereField, " and ");
 
 	Where = ConcatStrings(Where, eWhereAdd->Text, " and ");
 
@@ -603,4 +622,9 @@ void TMain::SaveDataToFile(String FileName) {
 	}
 }
 
+// ---------------------------------------------------------------------------
+void __fastcall TMain::btnClearTimeClick(TObject *Sender) {
+	dtpTimeFrom->Time = StrToTime("00:00:00");
+	dtpTimeTo->Time = StrToTime("23:59:59");
+}
 // ---------------------------------------------------------------------------

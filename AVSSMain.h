@@ -66,6 +66,11 @@ __published:
 	TButton *btnSaveToFile;
 	TLabel *lblDataBase;
 	TComboBox *cboxDataBase;
+	TLabel *lblWhereCargotype;
+	TEdit *eWhereCargotype;
+	TEdit *eWhereVannum;
+	TLabel *lblWhereVannum;
+	TButton *btnClearTime;
 
 	void __fastcall btnCloseClick(TObject *Sender);
 	void __fastcall btnAboutClick(TObject *Sender);
@@ -85,6 +90,7 @@ __published:
 	void __fastcall dtpDateFromChange(TObject *Sender);
 	void __fastcall cboxServerHostChange(TObject *Sender);
 	void __fastcall btnSaveToFileClick(TObject *Sender);
+	void __fastcall btnClearTimeClick(TObject *Sender);
 
 private:
 	TConnectionInfoList * ConnectionInfoList;
