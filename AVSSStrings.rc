@@ -20,6 +20,6 @@ IDS_ERROR_DATASET_SAVE,
         "Не удалось сохранить данные в файл:\n\n%s"
 
 IDS_MYSQL_CONNECTION,
-        "DRIVER={MySQL ODBC 3.51 Driver}; SERVER=%s; PORT=%s; DATABASE=%s; USER=%s; PASSWORD=%s; OPTION=3;"
+        "DRIVER={MySQL ODBC 8.0 Unicode Driver}; SERVER=%s; PORT=%s; DATABASE=%s; USER=%s; PASSWORD=%s; OPTION=3;"
 
 END
