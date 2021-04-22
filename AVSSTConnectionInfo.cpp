@@ -18,11 +18,13 @@ __fastcall TConnectionInfo::TConnectionInfo() {
 
 // ---------------------------------------------------------------------------
 void TConnectionInfo::SetDefault() {
+	FDriver = "";
 	FHost = "localhost";
 	FPort = "3306";
 	FDatabase = "";
 	FUser = "root";
 	FPassword = "";
+    FColor = clWindow;
 }
 
 // ---------------------------------------------------------------------------
@@ -34,9 +36,9 @@ bool __fastcall TConnectionInfo::Equals(TObject * Obj) {
 
 	TConnectionInfo * Connection = (TConnectionInfo*) Obj;
 
-	if (Host != Connection->Host || Port != Connection->Port ||
-		Database != Connection->Database || User != Connection->User ||
-		Password != Connection->Password)
+	if (Driver != Connection->Driver || Host != Connection->Host ||
+		Port != Connection->Port || Database != Connection->Database ||
+		User != Connection->User || Password != Connection->Password)
 		return false;
 
 	return true;
@@ -44,6 +46,7 @@ bool __fastcall TConnectionInfo::Equals(TObject * Obj) {
 
 // ---------------------------------------------------------------------------
 void __fastcall TConnectionInfo::Assign(TConnectionInfo * Source) {
+	Driver = Source->Driver;
 	Host = Source->Host;
 	Port = Source->Port;
 	Database = Source->Database;
@@ -56,7 +59,8 @@ String __fastcall TConnectionInfo::ToString() {
 	String S;
 
 	S = "TConnectionInfo{";
-	S += "Host='" + Host + "'";
+	S += "Driver='" + Driver + "'";
+	S += ", Host='" + Host + "'";
 	S += ", Port='" + Port + "'";
 	S += ", Database='" + Database + "'";
 	S += ", User='" + User + "'";
@@ -69,6 +73,6 @@ String __fastcall TConnectionInfo::ToString() {
 // ---------------------------------------------------------------------------
 String TConnectionInfo::GetConnectionString(bool WithDB) {
 	return Format(IDS_MYSQL_CONNECTION,
-		ARRAYOFCONST((FHost, FPort, WithDB ? FDatabase : String(""), User,
-		FPassword)));
+		ARRAYOFCONST((FDriver, FHost, FPort, WithDB ? FDatabase : String(""),
+		FUser, FPassword)));
 }

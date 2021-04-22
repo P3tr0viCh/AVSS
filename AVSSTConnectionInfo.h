@@ -10,6 +10,8 @@
 // ---------------------------------------------------------------------------
 class TConnectionInfo : public TObject {
 private:
+	String FDriver;
+
 	String FHost;
 	String FPort;
 
@@ -17,6 +19,8 @@ private:
 
 	String FUser;
 	String FPassword;
+
+	TColor FColor;
 
 public:
 	__fastcall TConnectionInfo();
@@ -29,6 +33,8 @@ public:
 
 	String GetConnectionString(bool WithDB = true);
 
+	__property String Driver = {read = FDriver, write = FDriver};
+
 	__property String Host = {read = FHost, write = FHost};
 	__property String Port = {read = FPort, write = FPort};
 
@@ -36,6 +42,8 @@ public:
 
 	__property String User = {read = FUser, write = FUser};
 	__property String Password = {read = FPassword, write = FPassword};
+
+	__property TColor Color = {read = FColor, write = FColor};
 };
 
 // ---------------------------------------------------------------------------

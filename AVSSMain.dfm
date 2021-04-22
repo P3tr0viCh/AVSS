@@ -49,7 +49,6 @@ object Main: TMain
     Font.Style = []
     ParentFont = False
     TabOrder = 1
-    ExplicitTop = -6
     DesignSize = (
       750
       345)
@@ -67,13 +66,6 @@ object Main: TMain
       Height = 17
       Caption = 'FROM'
       FocusControl = cboxTable
-    end
-    object lblDate: TLabel
-      Left = 70
-      Top = 172
-      Width = 69
-      Height = 17
-      Caption = 'datetime>='
     end
     object lblDateAnd: TLabel
       Left = 278
@@ -117,7 +109,7 @@ object Main: TMain
     object lblWhereCargotype: TLabel
       Left = 290
       Top = 232
-      Width = 85
+      Width = 82
       Height = 17
       Caption = 'cargotype like'
       FocusControl = eWhereCargotype
@@ -324,6 +316,17 @@ object Main: TMain
       TabOrder = 9
       OnClick = btnClearTimeClick
     end
+    object cboxDate: TCheckBox
+      Left = 50
+      Top = 172
+      Width = 96
+      Height = 17
+      Caption = 'datetime>='
+      Checked = True
+      State = cbChecked
+      TabOrder = 19
+      OnClick = cboxScalesChange
+    end
   end
   object StatusBar: TStatusBar
     Left = 0
@@ -343,7 +346,6 @@ object Main: TMain
         Text = #1053#1086#1084#1077#1088' '#1079#1072#1087#1080#1089#1080': %d'
         Width = 50
       end>
-    ExplicitTop = 536
   end
   object pnlBottom: TPanel
     Left = 0
@@ -353,7 +355,6 @@ object Main: TMain
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 3
-    ExplicitTop = 466
     object lblServerHost: TLabel
       Left = 16
       Top = 10
@@ -435,7 +436,6 @@ object Main: TMain
     BevelOuter = bvNone
     Padding.Top = 8
     TabOrder = 4
-    ExplicitTop = 426
     object DBNavigator: TDBNavigator
       Left = 0
       Top = 8

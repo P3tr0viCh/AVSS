@@ -150,6 +150,8 @@ void __fastcall TMain::FormCreate(TObject *Sender) {
 		}
 		cboxDataBase->Items->Assign(DBList);
 
+		Driver = FileIni->ReadString("Driver", "Name", "");
+
 		TConnectionInfo * ConnectionInfo;
 
 		String Section;
@@ -172,6 +174,13 @@ void __fastcall TMain::FormCreate(TObject *Sender) {
 			ConnectionInfo->User = FileIni->ReadString(Section, "User", "");
 			ConnectionInfo->Password =
 				Decrypt(FileIni->ReadString(Section, "Pass", ""));
+
+			try {
+				ConnectionInfo->Color = StringToColor(FileIni->ReadString(Section, "Color", ""));
+			}
+			catch (...) {
+				ConnectionInfo->Color = clWindow;
+			}
 
 			ConnectionInfoList->Add(ConnectionInfo);
 		}
@@ -334,7 +343,7 @@ void TMain::UpdateWhere() {
 		}
 	}
 
-	if (!IsEmpty(DateTimeField)) {
+	if (!IsEmpty(DateTimeField) && cboxDate->Checked) {
 		if (cboxDateDay->Checked) {
 			dtpDateTo->Date = dtpDateFrom->Date;
 			dtpTimeTo->Time = StrToTime("23:59:59");
@@ -489,7 +498,7 @@ void __fastcall TMain::btnPerformClick(TObject * Sender) {
 
 		ADOConnection->ConnectionString =
 			Format(IDS_MYSQL_CONNECTION,
-			ARRAYOFCONST((cboxServerHost->Text, eServerPort->Text,
+			ARRAYOFCONST((Driver, cboxServerHost->Text, eServerPort->Text,
 			cboxDataBase->Text, eUser->Text, ePass->Text)));
 
 		ADOConnection->Open();
@@ -548,9 +557,7 @@ void __fastcall TMain::cboxServerHostChange(TObject * Sender) {
 		return;
 	}
 
-	if (cboxServerHost->ItemIndex < 0) {
-		return;
-	}
+	cboxServerHost->Color = clWindow;
 
 	for (int i = 0; i < ConnectionInfoList->Count; i++) {
 		if (ConnectionInfoList->Items[i]->Host == cboxServerHost->Text) {
@@ -558,6 +565,8 @@ void __fastcall TMain::cboxServerHostChange(TObject * Sender) {
 			cboxDataBase->Text = ConnectionInfoList->Items[i]->Database;
 			eUser->Text = ConnectionInfoList->Items[i]->User;
 			ePass->Text = ConnectionInfoList->Items[i]->Password;
+
+			cboxServerHost->Color = ConnectionInfoList->Items[i]->Color;
 		}
 	}
 }

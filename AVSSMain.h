@@ -26,7 +26,6 @@ __published:
 	TPanel *pnlTop;
 	TLabel *lblScales;
 	TLabel *lblFrom;
-	TLabel *lblDate;
 	TLabel *lblDateAnd;
 	TLabel *lblSelect;
 	TLabel *lblWhere;
@@ -71,6 +70,7 @@ __published:
 	TEdit *eWhereVannum;
 	TLabel *lblWhereVannum;
 	TButton *btnClearTime;
+	TCheckBox *cboxDate;
 
 	void __fastcall btnCloseClick(TObject *Sender);
 	void __fastcall btnAboutClick(TObject *Sender);
@@ -93,6 +93,7 @@ __published:
 	void __fastcall btnClearTimeClick(TObject *Sender);
 
 private:
+	String Driver;
 	TConnectionInfoList * ConnectionInfoList;
 
 	TStringList * DBList;
